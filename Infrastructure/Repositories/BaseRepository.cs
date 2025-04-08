@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Data.Contexts;
+using Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
@@ -11,6 +12,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
     Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> expression);
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression);
     Task<IEnumerable<TEntity>> GetAllAsync(bool orderByDescending = false, Expression<Func<TEntity, object>>? sortBy = null, Expression<Func<TEntity, bool>>? filterBy = null, params Expression<Func<TEntity, object>>[] includes);
+    Task<IEnumerable<ProjectEntity>> GetAllAsync();
     Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> findBy, params Expression<Func<TEntity, object>>[] includes);
     Task<bool> UpdateAsync(TEntity entity);
 }
@@ -26,13 +28,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         _dbSet = _context.Set<TEntity>();
     }
 
-    public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
-    {
-        return await _dbSet.AnyAsync(expression);
-    }
-
-
-    public virtual async Task<bool> AddAsync(TEntity entity)
+     public virtual async Task<bool> AddAsync(TEntity entity)
     {
         if (entity == null)
             return false;
@@ -51,6 +47,9 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
     }
     public virtual async Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> expression)
     {
+        if (expression == null)
+            return false;
+
         var entity = await _dbSet.FirstOrDefaultAsync(expression);
         if (entity == default)
             return false;
@@ -67,6 +66,11 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
             return false;
         }
     }
+    public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
+    {
+        return await _dbSet.AnyAsync(expression);
+    }
+
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync(bool orderByDescending = false, Expression<Func<TEntity, object>>? sortBy = null, Expression<Func<TEntity, bool>>? filterBy = null, params Expression<Func<TEntity, object>>[] includes)
     {
         IQueryable<TEntity> query = _dbSet;
@@ -89,6 +93,8 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         return await query.ToListAsync();
     }
 
+    public abstract Task<IEnumerable<ProjectEntity>> GetAllAsync();
+
     public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> findBy, params Expression<Func<TEntity, object>>[] includes)
     {
         IQueryable<TEntity> query = _dbSet;
@@ -100,7 +106,6 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         var entity = await query.FirstOrDefaultAsync(findBy);
         return entity ?? null!;
     }
-
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
         if (entity == null)
@@ -118,4 +123,5 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
             return false;
         }
     }
+
 }

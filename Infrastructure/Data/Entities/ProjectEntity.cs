@@ -26,7 +26,7 @@ public class ProjectEntity
     public string UserId { get; set; } = null!;
     public virtual UserEntity User { get; set; } = null!;
 
-    [Column(TypeName = "money")]
+    [Column(TypeName = "decimal(18,2)")]
     public decimal? Budget { get; set; }
 
     [ForeignKey(nameof(Status))]

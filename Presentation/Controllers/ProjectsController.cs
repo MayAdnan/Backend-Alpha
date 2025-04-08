@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Models;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;

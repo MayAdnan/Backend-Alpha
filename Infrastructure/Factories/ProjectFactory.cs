@@ -18,10 +18,14 @@ public class ProjectFactory
                 StartDate = entity.StartDate,
                 EndDate = entity.EndDate,
                 Budget = entity.Budget,
+
                 Client = new Client
                 {
                     Id = entity.Client.Id,
-                    ClientName = entity.Client.ClientName
+                    ClientName = entity.Client.ClientName,
+                    ClientEmail = entity.Client.ClientEmail,
+                    ClientPhone = entity.Client.ClientPhone,
+
                 },
                 User = new User
                 {
@@ -69,7 +73,8 @@ public class ProjectFactory
                 EndDate = formData.EndDate,
                 Budget = formData.Budget,
                 ClientId = formData.ClientId,
-                UserId = formData.UserId
+                UserId = formData.UserId,
+                Created = formData.Created,
             };
     }
 }

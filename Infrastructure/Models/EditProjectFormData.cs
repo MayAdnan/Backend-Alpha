@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Infrastructure.Models;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models;
 
@@ -7,6 +9,7 @@ public class EditProjectFormData
     [Required]
     public string Id { get; set; } = null!;
     public string? Image { get; set; }
+    public IFormFile? NewImage { get; set; }
 
     [Required]
     public string ProjectName { get; set; } = null!;

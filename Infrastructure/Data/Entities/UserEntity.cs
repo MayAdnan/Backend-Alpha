@@ -1,13 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Data.Entities
 {
-    public class UserEntity //userdel. 
+    public class UserEntity : IdentityUser
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string? Image { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
+        public UserAddressEntity? Address { get; set; } 
         public virtual ICollection<ProjectEntity> Projects { get; set; } = [];
 
     }

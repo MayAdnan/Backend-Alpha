@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Infrastructure.Models;
+﻿namespace Infrastructure.Models;
 
 public class Project
 {
     public string Id { get; set; } = null!;
-    public IFormFile? Image { get; set; }
+    public string? Image { get; set; }
     public string ProjectName { get; set; } = null!;
     public string? Description { get; set; }
     public DateTime StartDate { get; set; }

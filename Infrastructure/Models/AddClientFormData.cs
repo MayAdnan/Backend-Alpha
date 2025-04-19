@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models;
 
 public class AddClientFormData
 {
-    public IFormFile? ClientImage { get; set; }
+    public string? ClientImage { get; set; }
 
     [Required]
     public string ClientName { get; set; } = null!;

@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models;
 
-public class UpdateStatusForm
+public class UpdateStatusFormData
 {
     [Required]
     public int Id { get; set; }

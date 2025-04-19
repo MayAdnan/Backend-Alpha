@@ -28,14 +28,12 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
         return Ok(result);
     }
 
-
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
     {
         var result = await _projectService.GetProjectByIdAsync(id);
         return result == null ? NotFound() : Ok(result);
     }
-
 
     [HttpPut]
     public async Task<IActionResult> Update(EditProjectFormData formData)
@@ -46,7 +44,6 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
         var result = await _projectService.UpdateProjectAsync(formData);
         return result ? Ok() : NotFound();
     }
-
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)

@@ -2,9 +2,14 @@
 
 namespace Infrastructure.Models;
 
-public class AddUserFormData
+public class UpdateUserFormData
 {
-    public string? ImageFile { get; set; }
+    [Required]
+    public string Id { get; set; } = null!;
+
+    public string? Image { get; set; }
+    public string? NewImage { get; set; }
+
 
     [Required]
     public string FirstName { get; set; } = null!;
@@ -13,12 +18,10 @@ public class AddUserFormData
     public string LastName { get; set; } = null!;
 
     [Required]
-    [EmailAddress]
     public string Email { get; set; } = null!;
-    [Required]
-    public string Role { get; set; } = "User";
     public string? PhoneNumber { get; set; }
-    public string? Address { get; set; }
+    public string? StreetName { get; set; }
     public string? PostalCode { get; set; }
     public string? City { get; set; }
+
 }

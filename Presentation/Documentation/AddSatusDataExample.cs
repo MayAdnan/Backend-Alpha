@@ -1,13 +1,13 @@
 ﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation;
+namespace Presentation.Documentation;
 
-public class AddStatusDataExample : IExamplesProvider<AddStatusForm>
+public class AddStatusDataExample : IExamplesProvider<AddStatusFormData>
 {
-    public AddStatusForm GetExamples()
+    public AddStatusFormData GetExamples()
     {
-        return new AddStatusForm()
+        return new AddStatusFormData()
         {
             StatusName = "STARTED"
         };

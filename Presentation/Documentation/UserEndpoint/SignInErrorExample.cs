@@ -1,7 +1,7 @@
-﻿using Business.Models;
+﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation.UserEndpoint;
+namespace Presentation.Documentation.UserEndpoint;
 
 public class SignInErrorExample : IExamplesProvider<ErrorMessage>
 {

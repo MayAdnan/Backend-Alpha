@@ -1,4 +1,4 @@
-﻿using Infrastructure.Data.Entities;
+﻿using Infrastructure.Factories;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 
@@ -6,11 +6,10 @@ namespace Infrastructure.Services;
 
 public interface IClientService
 {
-    Task<Client?> CreateClientAsync (AddClientFormData formData);
-    Task<Client?> UpdateClientAsync(string id, EditClientFormData formData);
+    Task<bool> CreateClientAsync (AddClientFormData formData);
+    Task<bool> UpdateClientAsync(EditClientFormData formData);
     Task<bool> DeleteClientAsync(string id);
     Task<IEnumerable<Client>> GetClientsAsync();
-    Task<Client> GetUserByClientNameAsync(string clientName);
     Task<Client> GetClientByIdAsync(string id);
 }
 
@@ -18,78 +17,56 @@ public class ClientService(IClientRepository clientRepository) : IClientService
 {
     private readonly IClientRepository _clientRepository = clientRepository;
 
-    public async Task<Client?> CreateClientAsync(AddClientFormData formData)
+    public async Task<bool> CreateClientAsync(AddClientFormData formData)
     {
-        var entity = new ClientEntity
-        {
-            ClientName = formData.ClientName,
-            ClientEmail = formData.ClientEmail,
-            ClientPhone = formData.ClientPhone,
-            ClientImage = formData.ClientImage,
-           
-        };
-        var createdEntity = await _clientRepository.CreateAsync(entity);
-        return createdEntity == null ? null! : new Client
-        {
-            Id = createdEntity.Id,
-            ClientName = createdEntity.ClientName,
-        };
+        if (formData == null)
+            return false;
+
+        var clientEntity = ClientFactory.ToEntity(formData);
+        var createResult = await _clientRepository.AddAsync(clientEntity);
+        return createResult;
+
     }
-    public async Task<Client?> UpdateClientAsync(string id, EditClientFormData formData)
+    public async Task<bool> UpdateClientAsync( EditClientFormData formData)
     {
-        var entity = await _clientRepository.GetAsync(x => x.Id == id);
-        if (entity == null) return null;
+        if (formData == null)
+            return false;
 
-        entity.ClientName = formData.ClientName;
-        entity.ClientEmail = formData.ClientEmail;
-        entity.ClientPhone = formData.ClientPhone;
-        entity.ClientImage = formData.ClientImage;
+        if (!await _clientRepository.ExistsAsync(x => x.Id == formData.Id))
+            return false;
 
-        var updateResult = await _clientRepository.UpdateAsync(entity);
-
-        return updateResult ? new Client
-        {
-            Id = entity.Id,
-            ClientName = entity.ClientName,
-        } : null;
+        var clientEntity = ClientFactory.ToEntity(formData);
+        var updateResult = await _clientRepository.UpdateAsync(clientEntity);
+        return updateResult;
     }
     public async Task<bool> DeleteClientAsync(string id)
     {
         var entity = await _clientRepository.GetAsync(x => x.Id == id);
         if (entity == null) return false;
-        var deleteResult = await _clientRepository.DeleteAsync(entity);
+        var deleteResult = await _clientRepository.DeleteAsync(x => x.Id == id);
         return deleteResult;
     }
 
     public async Task<IEnumerable<Client>> GetClientsAsync()
     {
-        var entites = await _clientRepository.GetAllAsync(sortBy: x => x.ClientName);
-        var clients = entites.Select(entity => new Client
-        {
-            Id = entity.Id,
-            ClientName = entity.ClientName,
-        });
+        var entites = await _clientRepository.GetAllAsync(
+            orderByDescending: false,
+            sortBy: x => x.ClientName,
+            filterBy: null,
+            i => i.ClientInformation,
+            i => i.Projects);
 
+        var clients = entites.Select(ClientFactory.ToModel);
         return clients;
     }
 
-    public async Task<Client> GetUserByIdAsync(string id)
+    public async Task<Client> GetClientByIdAsync(string id)
     {
-        var entity = await _clientRepository.GetAsync(x => x.Id == id);
-        return entity == null ? null! : new Client
-        {
-            Id = entity.Id,
-            ClientName = entity.ClientName,
-        };
+        var entity = await _clientRepository.GetClientWithDetailsAsync(id);
+        if(entity == null) return null!;
+        var client = ClientFactory.ToModel(entity);
+        return client;
+
     }
 
-    public async Task<Client> GetUserByClientNameAsync(string clientName)
-    {
-        var entity = await _clientRepository.GetAsync(x => x.ClientName.Equals(clientName, StringComparison.CurrentCultureIgnoreCase));
-        return entity == null ? null! : new Client
-        {
-            Id = entity.Id,
-            ClientName = entity.ClientName,
-        };
-    }
 }

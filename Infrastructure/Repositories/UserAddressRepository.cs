@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories
     {
 
     }
-    public class UserAddressRepository(DataContext context) : BaseRepository<UserAddressEntity>(context), UserAddressRepository
+    public class UserAddressRepository(DataContext context) : BaseRepository<UserAddressEntity>(context), IUserAddressRepository
     {
     }
 

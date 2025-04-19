@@ -9,6 +9,7 @@ namespace Infrastructure.Data.Contexts
         public virtual DbSet<ProjectEntity> Projects { get; set; } 
         public virtual DbSet<ClientEntity> Clients { get; set; } 
         public virtual DbSet<StatusEntity> Statuses{ get; set; }
+        public virtual DbSet<UserAddressEntity> UserAddresses { get; set; }
+        public virtual DbSet<ClientInformationEntity> ClientInformation { get; set; }
     }
-
 }

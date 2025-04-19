@@ -32,7 +32,7 @@ public class ClientsController(IClientService clientService) : ControllerBase
             return BadRequest(formData);
 
         var result = await _clientService.CreateClientAsync(formData);
-        return result != null ? Ok(result) : BadRequest();
+        return result ? Ok(result) : BadRequest();
     }
 
     [HttpPut]
@@ -42,7 +42,7 @@ public class ClientsController(IClientService clientService) : ControllerBase
             return BadRequest(formData);
 
         var result = await _clientService.UpdateClientAsync(formData);
-        return result != null ? Ok(result) : NotFound();
+        return result  ? Ok(result) : NotFound();
     }
 
     [HttpDelete("{id}")]

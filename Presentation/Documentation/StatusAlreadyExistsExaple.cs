@@ -1,7 +1,7 @@
-﻿using Business.Models;
+﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation;
+namespace Presentation.Documentation;
 
 public class StatusAlreadyExistsExample : IExamplesProvider<ErrorMessage>
 {

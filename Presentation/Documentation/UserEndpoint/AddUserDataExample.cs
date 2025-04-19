@@ -1,11 +1,11 @@
 ﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation.UserEndpoint;
+namespace Presentation.Documentation.UserEndpoint;
 
-public class AddUserDataExample : IExamplesProvider<AddUserForm>
+public class AddUserDataExample : IExamplesProvider<AddUserFormData>
 {
-    public AddUserForm GetExamples() => new()
+    public AddUserFormData GetExamples() => new()
     {
         FirstName = "John",
         LastName = "Doe",

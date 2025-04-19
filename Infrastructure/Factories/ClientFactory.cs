@@ -7,6 +7,8 @@ namespace Infrastructure.Factories
     {
         public static Client ToModel(ClientEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity)); // Kontrollera null här
+
             return entity == null
                 ? null!
                 : new Client
@@ -16,8 +18,8 @@ namespace Infrastructure.Factories
                     ClientImage = entity.ClientImage,
                     ClientEmail = entity.ClientEmail,
                     ClientPhone = entity.ClientPhone,
-
-                    ClientInformation = new ClientInformation
+                    ClientInformation = entity.ClientInformation != null
+                    ? new ClientInformation
                     {
                         Id = entity.ClientInformation.Id,
                         ClientBillingCity = entity.ClientInformation.ClientBillingCity,
@@ -25,13 +27,15 @@ namespace Infrastructure.Factories
                         ClientBillingPostalCode = entity.ClientInformation.ClientBillingPostalCode,
                         ClientBillingReference = entity.ClientInformation.ClientBillingReference,
 
-                    },
-                    Projects = entity.Projects.Select(p => new Project
-                    {
-                        Id = p.Id,
-                        ProjectName = p.ProjectName,
+                    }
+                    :null,
 
-                    }).ToList()
+                    Projects = entity.Projects.Select(project => new Project
+                    {
+                        Id = project.Id,
+                        ProjectName = project.ProjectName,
+                    }).ToList() ?? new List<Project>()
+
                 };
         }
         public static ClientEntity ToEntity(EditClientFormData formData)
@@ -47,7 +51,7 @@ namespace Infrastructure.Factories
                     ClientPhone = formData.ClientPhone,
                     ClientInformation = new ClientInformationEntity
                     {
-                        Id = formData.ClientInformationId,
+                        Id = formData.
                         ClientBillingCity = formData.ClientBillingCity,
                         ClientBillingAddress = formData.ClientBillingAddress,
                         ClientBillingPostalCode = formData.ClientBillingPostalCode,
@@ -55,24 +59,23 @@ namespace Infrastructure.Factories
                     }
                 };
         }
-        public static ClientEntity ToEntity(AddClientFormData client)
+        public static ClientEntity ToEntity(AddClientFormData clientFormData)
         {
-            return client == null
+            return clientFormData == null
                 ? null!
                 : new ClientEntity
                 {
-                    Id = client.Id,
-                    ClientName = client.ClientName,
-                    ClientImage = client.ClientImage,
-                    ClientEmail = client.ClientEmail,
-                    ClientPhone = client.ClientPhone,
+                    ClientName = clientFormData.ClientName,
+                    ClientImage = clientFormData.ClientImage,
+                    ClientEmail = clientFormData.ClientEmail,
+                    ClientPhone = clientFormData.ClientPhone,
+
                     ClientInformation = new ClientInformationEntity
                     {
-                        Id = client.ClientInformation.Id,
-                        ClientBillingCity = client.ClientInformation.ClientBillingCity,
-                        ClientBillingAddress = client.ClientInformation.ClientBillingAddress,
-                        ClientBillingPostalCode = client.ClientInformation.ClientBillingPostalCode,
-                        ClientBillingReference = client.ClientInformation.ClientBillingReference,
+                        ClientBillingCity = clientFormData.ClientBillingCity,
+                        ClientBillingAddress = clientFormData.ClientBillingAddress,
+                        ClientBillingPostalCode = clientFormData.ClientBillingPostalCode,
+                        ClientBillingReference = clientFormData.ClientBillingReference,
                     }
                 };
         }

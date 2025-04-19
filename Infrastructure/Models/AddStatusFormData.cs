@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models;
 
-public class AddStatusForm
+public class AddStatusFormData
 {
     [Required]
     public string StatusName { get; set; } = null!;

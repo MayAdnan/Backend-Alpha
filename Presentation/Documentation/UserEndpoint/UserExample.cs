@@ -1,12 +1,21 @@
-﻿using Business.Models;
+﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation.UserEndpoint;
+namespace Presentation.Documentation.UserEndpoint;
 
-public class UserValidationErrorExample : IExamplesProvider<ErrorMessage>
+public class UserExample : IExamplesProvider<User>
 {
-    public ErrorMessage GetExamples() => new()
+    public User GetExamples() => new()
     {
-        Message = "Validation failed: Email is required."
+        Id = "ae5f645a-9537-40c0-9016-2fffe881b1b3",
+        FirstName = "John",
+        LastName = "Doe",
+        Email = "john.doe@domain.com",
+        Role = "User",
+        Image = null,
+        Phone = "+46 73-123 45 67",
+        Address = "Nordkapsvägen 1",
+        PostalCode = "136 57",
+        City = "VEGA",
     };
 }

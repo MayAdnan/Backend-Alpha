@@ -5,8 +5,8 @@ namespace Infrastructure.Services;
 
 public interface IUserService
 {
-    Task<User> GetUserByIdAsync(string id);
     Task<IEnumerable<User>> GetUsersAsync();
+    Task<User> GetUserByIdAsync(string id);
 }
 
 public class UserService(IUserRepository userRepository) : IUserService

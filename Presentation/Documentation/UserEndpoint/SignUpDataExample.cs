@@ -1,11 +1,11 @@
-﻿using Business.Dtos;
+﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation.UserEndpoint;
+namespace Presentation.Documentation.UserEndpoint;
 
-public class SignUpDataExample : IExamplesProvider<SignUpForm>
+public class SignUpDataExample : IExamplesProvider<SignUpFormData>
 {
-    public SignUpForm GetExamples() => new()
+    public SignUpFormData GetExamples() => new()
     {
         FirstName = "Adam",
         LastName = "Doe",

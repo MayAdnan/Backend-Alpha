@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-namespace Infrastructure.Models;
+﻿namespace Infrastructure.Models;
 
 public class User
 {
@@ -7,9 +6,8 @@ public class User
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string Email { get; set; } = null!;
-
-    public string Role { get; set; } = null!;
-    public IFormFile? Image { get; set; }
+    public string? Role { get; set; } 
+    public string? Image { get; set; }
     public string? Phone { get; set; }
     public string? Address { get; set; }
     public string? PostalCode { get; set; }

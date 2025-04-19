@@ -5,12 +5,11 @@ namespace Infrastructure.Data.Entities
 {
     public class UserEntity : IdentityUser
     {
-        [Key]
         public string? Image { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public UserAddressEntity? Address { get; set; } 
         public virtual ICollection<ProjectEntity> Projects { get; set; } = [];
-
+       
     }
 }

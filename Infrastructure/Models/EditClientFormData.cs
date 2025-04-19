@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
 {
@@ -16,7 +15,7 @@ namespace Infrastructure.Models
         public string ClientPhone { get; set; } = null!;
         [Required]
         public string ClientBillingAddress { get; set; } = null!;   
-        public IFormFile? ClientImage { get; set; }
+        public string? ClientImage { get; set; }
      
         public string ClientBillingCity { get; set; } = null!;
         public string? ClientBillingPostalCode { get; set; }

@@ -1,57 +1,55 @@
 using Infrastructure.Data.Contexts;
+using Infrastructure.Data.Entities;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
+using Presentation.Extensions.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(options =>
 {
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
-
-    options.EnableAnnotations();
-    options.ExampleFilters();
-    options.SwaggerDoc("v1", new OpenApiInfo
+    options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
-        Version = "v. 1.0",
-        Title = "Alpha BackOffice API Documentation",
-        Description = "This is the standard documentation for Alpha BackOffice Portal.",
+        Description = "API Key needed to access the endpoints. Example: 'your-api-key'",
+        In = ParameterLocation.Header,
+        Name = "X-API-KEY",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "ApiKeyScheme"
+
     });
 
-    var apiAdminScheme = new OpenApiSecurityScheme
-    {
-        Name = "X-ADM-API-KEY",
-        Description = "Admin Api-Key Required",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "ApiKeyScheme",
-        Reference = new OpenApiReference
-        {
-            Id = "AdminApiKey",
-            Type = ReferenceType.SecurityScheme,
-        }
-    };
-    options.AddSecurityDefinition("AdminApiKey", apiAdminScheme);
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { apiAdminScheme, new List<string>() }
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            new List<string>()
+        }
     });
-
 });
 
 
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddIdentity<UserEntity, IdentityRole>().AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IUserAddressRepository, UserAddressRepository>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
@@ -62,16 +60,18 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 var app = builder.Build();
 
 app.MapOpenApi();
+app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "Web API"));
 
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));
-app.UseHttpsRedirection();
 
+app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
+app.UseMiddleware<DefaultApiKeyMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
 app.MapControllers();
 
 app.Run();

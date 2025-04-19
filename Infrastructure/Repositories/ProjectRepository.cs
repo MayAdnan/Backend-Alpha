@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories;
 
 public interface IProjectRepository : IBaseRepository<ProjectEntity>
 {
-    Task<IEnumerable<ProjectEntity>> GetByIaAsync(string id);
+    Task<ProjectEntity?> GetByIdAsync(string id);
     Task<ProjectEntity?> GetAsync(Expression<Func<ProjectEntity, bool>> expression);
 }
 public class ProjectRepository(DataContext context) : BaseRepository<ProjectEntity>(context), IProjectRepository

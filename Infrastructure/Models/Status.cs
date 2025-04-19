@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    public  class Status
+    public class Status
     {
         [Required]
         public int Id { get; set; } 

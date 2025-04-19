@@ -36,7 +36,6 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         return result;
     }
 
-
     public async Task<IEnumerable<Project>> GetProjectsAsync()
     {
         var entites = await _projectRepository.GetAllAsync(
@@ -77,8 +76,6 @@ public class ProjectService(IProjectRepository projectRepository, IStatusService
         var result = await _projectRepository.UpdateAsync(projectEntity);
         return result;
     }
-
-
     public async Task<bool> DeleteProjectAsync(string id)
     {
         var result = await _projectRepository.DeleteAsync(x => x.Id == id);

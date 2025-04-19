@@ -1,11 +1,11 @@
-﻿using Business.Dtos;
+﻿using Infrastructure.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Documentation.UserEndpoint;
+namespace Presentation.Documentation.UserEndpoint;
 
-public class SignInDataExample : IExamplesProvider<SignInForm>
+public class SignInDataExample : IExamplesProvider<SignInFormData>
 {
-    public SignInForm GetExamples() => new()
+    public SignInFormData GetExamples() => new()
     {
         Email = "john.doe@domain.com",
         Password = "BytMig123!",

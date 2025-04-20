@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Data.Entities;
 using Infrastructure.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Factories
 {

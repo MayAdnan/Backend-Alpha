@@ -12,7 +12,8 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
 
 
     [HttpPost]
-    public async Task<IActionResult> Create(AddProjectFormData formData)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Create([FromForm] AddProjectFormData formData)
     {
         if (!ModelState.IsValid)
             return BadRequest(formData);
@@ -20,6 +21,7 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
         var result = await _projectService.CreateProjectAsync(formData);
         return result ? Ok() : BadRequest();
     }
+
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -36,7 +38,8 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(EditProjectFormData formData)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Update([FromForm]EditProjectFormData formData)
     {
         if (!ModelState.IsValid)
             return BadRequest(formData);
